@@ -30,7 +30,7 @@ public class RailStartAnchor : XRBaseInteractable
         request.endPosition = railEnd.position;
         request.endRotation = railEnd.rotation;
 
-        locomotionProvider.requestNewMovement(request);
+        //locomotionProvider.requestNewMovement(request);
 
         base.OnSelectEntered(interactor);
     }
