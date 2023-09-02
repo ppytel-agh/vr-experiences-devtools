@@ -6,7 +6,7 @@ using UnityEngine;
 public class RailNode : MonoBehaviour
 {
     public RailNode nextNode;
-    public float initialSpeed = 1.0f;
+    public float speedchange = 0.0f;
 
     //assumes nextNode is not null
     public RailMovementRequest GetMovementToNextNodeRequest()
@@ -28,6 +28,8 @@ public class RailNode : MonoBehaviour
 
         node.position = this.transform.position;
         node.rotation = this.transform.rotation;
+
+        node.speedChange = this.speedchange;
 
         return node;
     }
