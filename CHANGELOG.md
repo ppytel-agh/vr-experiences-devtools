@@ -13,3 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Initial rail movement system with sample scene
+- Pano 360 scene example
+- lector panel example
+- interactive display prototype
+- scenes transition example
