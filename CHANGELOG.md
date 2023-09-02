@@ -7,3 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.0] - 2023-07-10
 
 - Initial version
+
+## [0.2.0] - 2023-09-02
+
+### Added
+
+- Initial rail movement system with sample scene
