@@ -12,6 +12,26 @@
 		  "displayName": "Rail Movement",
 		  "description": "Shows how to implement a rail system for automatic movement.",
 		  "path": "Samples~/RailMovement"
+		},
+		{
+			"displayName": "Pano 360",
+			"description": "Example of scene with 360 photo",
+			"path": "Samples~/Pano360"
+		},
+		{
+			"displayName": "Interactive Display",
+			"description": "Example of scene with interactive display",
+			"path": "Samples~/InteractiveDisplay"
+		},
+		{
+			"displayName": "Scenes Transition",
+			"description": "Example of scene with portals",
+			"path": "Samples~/ScenesTransition"
+		},
+		{
+			"displayName": "Lector Panels",
+			"description": "Example of scene with lector panels",
+			"path": "Samples~/LectorPanels"
 		}
 	]
 }
