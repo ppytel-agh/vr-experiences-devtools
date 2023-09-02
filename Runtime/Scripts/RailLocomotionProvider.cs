@@ -8,6 +8,7 @@ public struct RailMovementNode
 {
     public Vector3 position;
     public Quaternion rotation;
+    public float speedChange;
 }
 
 public struct RailMovementSegment
@@ -102,6 +103,8 @@ public class RailLocomotionProvider : LocomotionProvider
             system.xrOrigin.Origin.transform.position = this.movementNodes[0].position;
             system.xrOrigin.Origin.transform.rotation = this.movementNodes[0].rotation;
 
+            this.m_speed = this.movementNodes[0].speedChange;
+
             this.locomotionPhase = LocomotionPhase.Moving;
         }
         else if(this.locomotionPhase == LocomotionPhase.Moving)
@@ -132,6 +135,8 @@ public class RailLocomotionProvider : LocomotionProvider
                 {
                     this.startNodeIndex++;
                     this.currentSegment = this.GetCurrentSegmentFromNodes();
+
+                    this.m_speed += this.movementNodes[this.startNodeIndex].speedChange;
                 }                
             }
         }else if(this.locomotionPhase == LocomotionPhase.Done)
