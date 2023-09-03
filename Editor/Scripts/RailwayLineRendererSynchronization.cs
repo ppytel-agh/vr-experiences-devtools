@@ -27,49 +27,45 @@ public class RailwayLineRendererSynchronization : MonoBehaviour
             Vector3[] lineRendererPositions = new Vector3[this.railwayLineRenderer.positionCount];
             this.railwayLineRenderer.GetPositions(lineRendererPositions);
 
+            //delete all existing nodes
+            if(this.railwayRoot.rootNode != null)
+            {
+                RailNode currentNode = this.railwayRoot.rootNode;
+                while(currentNode.nextNode != null)
+                {
+                    RailNode toDelete = currentNode.nextNode;
+                    currentNode = currentNode.nextNode;
+                    DestroyImmediate(toDelete.gameObject);
+                }
+                DestroyImmediate(this.railwayRoot.rootNode.gameObject);
+            }
 
             if (lineRendererPositions.Length >= 1)
             {
-                if (this.railwayRoot.rootNode == null)
-                {
-                    GameObject newRootObject = new GameObject($"RailRootNode");
-                    newRootObject.transform.parent = this.railwayRoot.transform;
-                    newRootObject.AddComponent(typeof(RailNode));
-                    newRootObject.transform.position = lineRendererPositions[0];
-                    this.railwayRoot.rootNode = newRootObject.GetComponent<RailNode>();
-                }
-            }
+                GameObject newRootObject = new GameObject($"RailRootNode");
+                newRootObject.transform.parent = this.railwayRoot.transform;
 
-            RailNode currentNode = this.railwayRoot.rootNode.nextNode;
-            RailNode previousNode = this.railwayRoot.rootNode;
-            for (int i = 1; i < lineRendererPositions.Length; i++)
-            {
-                if (currentNode != null)
-                {
-                    currentNode.transform.position = lineRendererPositions[i];                    
-                }
-                else
+                newRootObject.transform.position = lineRendererPositions[0];
+
+                newRootObject.AddComponent(typeof(RailNode));
+                this.railwayRoot.rootNode = newRootObject.GetComponent<RailNode>();
+
+                RailNode currentNode = this.railwayRoot.rootNode;
+                for (int i = 1; i < lineRendererPositions.Length; i++)
                 {
                     GameObject newNodeObject = new GameObject($"RailNode({i})");
+                    newNodeObject.transform.parent = this.railwayRoot.transform;
+
+                    newNodeObject.transform.position = lineRendererPositions[i];
+
                     newNodeObject.AddComponent(typeof(RailNode));
                     RailNode newNode = newNodeObject.GetComponent<RailNode>();
 
-                    newNodeObject.transform.parent = this.railwayRoot.transform;
-
                     //need previous node to bind new node
-                    previousNode.nextNode = newNode;
-                }
+                    currentNode.nextNode = newNode;
 
-                previousNode = currentNode;
-                //reference next node in chain
-                currentNode = currentNode.nextNode;
-            }
-            //destroy rest of nodes
-            while(currentNode != null)
-            {
-                GameObject toDelete = currentNode.gameObject;
-                currentNode = currentNode.nextNode;
-                DestroyImmediate(toDelete);
+                    currentNode = newNode;
+                }
             }
         }
     }
