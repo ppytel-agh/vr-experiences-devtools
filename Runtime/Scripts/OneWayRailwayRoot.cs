@@ -1,18 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Plastic.Newtonsoft.Json.Bson;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using static PlasticGui.PlasticTableColumn;
 
 public class OneWayRailwayRoot : XRBaseInteractable
 {
     public RailNode rootNode;
+    public LineRenderer renderer;
+
+    private void RenderRailway()
+    {
+        List<RailMovementNode> nodesList = getNodesList();
+        Vector3[] positions = new Vector3[nodesList.Count];
+        for(int i = 0; i < nodesList.Count; i++)
+        {
+            positions[i] = nodesList[i].position;
+        }
+
+        renderer.positionCount = nodesList.Count;
+        renderer.SetPositions(positions);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(renderer != null)
+        {
+            RenderRailway();
+        }
     }
 
     // Update is called once per frame
