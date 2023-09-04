@@ -53,7 +53,7 @@ public class GuidedTour : MonoBehaviour
         this.phase = TourPhase.Idle;
     }
 
-    private void TransitionToTNextStop()
+    private void TransitionToNextStop()
     {
         if (this.stopIndex < this.tourStops.Count - 1)
         {
@@ -100,7 +100,16 @@ public class GuidedTour : MonoBehaviour
                 float movementDelta = this.guideMovementSpeed * Time.deltaTime;
                 this.guide.transform.position = Vector3.MoveTowards(this.guide.transform.position, this.nextStop.position, movementDelta);
                 if (this.guide.transform.position == this.nextStop.position)
-                {                    
+                {
+                    if (this.stopIndex < this.tourStops.Count - 1)
+                    {
+                        //works for moving from box to first stop
+                        this.stopIndex++;
+                    }
+                    else
+                    {
+                        this.stopIndex = -1;
+                    }
                     this.phase = TourPhase.RotatingInStop;
                 }
                 break;
@@ -112,7 +121,6 @@ public class GuidedTour : MonoBehaviour
                     //branch between any stop and moving back to box
                     if (this.stopIndex != -1)
                     {
-                        this.stopIndex++;
                         this.phase = TourPhase.AtStop;
                     }
                     else
@@ -143,14 +151,14 @@ public class GuidedTour : MonoBehaviour
                     }
                     else
                     {
-                        TransitionToTNextStop();
+                        TransitionToNextStop();
                     }
                 }
                 break;
             case TourPhase.PlayingDescription:
                 if(Time.time > this.descriptionPlayEndTimestamp)
                 {
-                    TransitionToTNextStop();
+                    TransitionToNextStop();
                 }
                 break;
         }
