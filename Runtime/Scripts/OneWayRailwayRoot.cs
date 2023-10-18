@@ -59,8 +59,6 @@ public class OneWayRailwayRoot : XRBaseInteractable
     {
         Debug.Log("triggered one way railway");
 
-        RailMovementRequest request = this.rootNode.GetMovementToNextNodeRequest();
-
         List<RailMovementNode> nodes = this.getNodesList();
 
         //assume interactor is the player and it has the locomotion provider
