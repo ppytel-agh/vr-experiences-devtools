@@ -24,13 +24,24 @@ public class RailStartAnchor : XRBaseInteractable
     protected override void OnSelectEntered(SelectEnterEventArgs interactor)
     {
         Debug.Log("sending rail movement request");
-        RailMovementRequest request = new RailMovementRequest();
-        request.startPosition = railStart.position;
-        request.startRotation = railStart.rotation;
-        request.endPosition = railEnd.position;
-        request.endRotation = railEnd.rotation;
-
-        //locomotionProvider.requestNewMovement(request);
+        
+		List<RailMovementNode> movementNodes = new List<RailMovementNode>();
+        RailMovementNode startNode = new RailMovementNode
+        {
+            position = railStart.position,
+            rotation = railStart.rotation,
+            speedChange = 0.0f
+        };
+        RailMovementNode endNode = new RailMovementNode
+        {
+            position = railEnd.position,
+            rotation = railEnd.rotation,
+            speedChange = 0.0f
+        };
+        movementNodes.Add(startNode);
+        movementNodes.Add(endNode);
+        
+        locomotionProvider.requestNewMovementSequence(movementNodes);
 
         base.OnSelectEntered(interactor);
     }
