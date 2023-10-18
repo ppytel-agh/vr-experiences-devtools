@@ -58,6 +58,7 @@ public struct RailMovementRequest
 
 public class RailLocomotionProvider : LocomotionProvider
 {
+    public float initialSpeed = 1.0f;
     public float m_speed = 1.0f;
 
     private RailMovementRequest m_currentMovement;
@@ -103,7 +104,7 @@ public class RailLocomotionProvider : LocomotionProvider
             system.xrOrigin.Origin.transform.position = this.movementNodes[0].position;
             system.xrOrigin.Origin.transform.rotation = this.movementNodes[0].rotation;
 
-            this.m_speed = this.movementNodes[0].speedChange;
+            this.m_speed = this.initialSpeed;
 
             this.locomotionPhase = LocomotionPhase.Moving;
         }
