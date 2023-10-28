@@ -32,6 +32,11 @@
 			"displayName": "Lector Panels",
 			"description": "Example of scene with lector panels",
 			"path": "Samples~/LectorPanels"
+		},
+		{
+			"displayName": "Scene Guide",
+			"description": "Example of scene with a guide",
+			"path": "Samples~/Guide"
 		}
 	]
 }
