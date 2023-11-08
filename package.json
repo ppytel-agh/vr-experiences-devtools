@@ -1,6 +1,6 @@
 {
 	"name": "pl.edu.agh.student.ppytel.vr-experiences-devtools",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Tools for developing VR experiences targeted at casual players",
 	"displayName": "VR Experiences Devtools",
 	"unity": "2022.3",
