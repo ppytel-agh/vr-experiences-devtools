@@ -69,7 +69,8 @@ public class GuidedTour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch(this.phase)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        switch (this.phase)
         {
             case TourPhase.Idle:
                 if(this.beginTourSignal)
@@ -131,7 +132,7 @@ public class GuidedTour : MonoBehaviour
                 }
                 break;
             case TourPhase.AtStop:
-                float distanceFromPlayer = Vector3.Distance(this.guide.transform.position, this.player.transform.position);
+                float distanceFromPlayer = Vector3.Distance(this.guide.transform.position, player.transform.position);
                 Debug.Log($"Player distance - {distanceFromPlayer}");
                 if (distanceFromPlayer <= this.maxDistanceToPlayDescription)
                 {
