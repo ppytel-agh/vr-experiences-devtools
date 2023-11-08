@@ -21,9 +21,9 @@ public class RailwayLineRendererSynchronization : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("updating RailwayLineRendererSynchronization");
         if (enabled)
         {
+            Debug.Log("updating RailwayLineRendererSynchronization");
             SynchronizeRailNodesWithLineRenderer();
         }
     }

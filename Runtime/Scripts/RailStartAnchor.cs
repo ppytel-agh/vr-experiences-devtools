@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RailStartAnchor : XRBaseInteractable
 {
-    public RailLocomotionProvider locomotionProvider;
     public Transform railStart;
     public Transform railEnd;
 
@@ -40,7 +40,10 @@ public class RailStartAnchor : XRBaseInteractable
         };
         movementNodes.Add(startNode);
         movementNodes.Add(endNode);
-        
+
+        GameObject interactorObject = interactor.interactorObject.transform.gameObject;
+        XROrigin origin = interactorObject.GetComponentInParent<XROrigin>();
+        RailLocomotionProvider locomotionProvider = origin.GetComponentInChildren<RailLocomotionProvider>();
         locomotionProvider.requestNewMovementSequence(movementNodes);
 
         base.OnSelectEntered(interactor);
