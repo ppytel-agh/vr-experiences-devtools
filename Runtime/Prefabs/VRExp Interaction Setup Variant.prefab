@@ -1,52 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1179267777966563048
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4329289471761109739}
-  - component: {fileID: 4199474867435484186}
-  m_Layer: 2
-  m_Name: RailMovement
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4329289471761109739
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179267777966563048}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6959443637605161685}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4199474867435484186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179267777966563048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ae649df21245704584b2ddbfae8b9d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_System: {fileID: 1614419717289646958}
-  initialSpeed: 1
-  m_speed: 1
 --- !u!1 &1734091008103493435
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +11,7 @@ GameObject:
   - component: {fileID: 4904241858333738661}
   m_Layer: 0
   m_Name: VRExp Interaction Setup Variant
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -318,7 +271,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1767192439, guid: f6c987b60fc46ef45ab5ff14b54b68d4, type: 3}
       propertyPath: m_ClearFlags
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503725, guid: f6c987b60fc46ef45ab5ff14b54b68d4, type: 3}
       propertyPath: m_Name
@@ -374,9 +327,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6981642495833523204, guid: f6c987b60fc46ef45ab5ff14b54b68d4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2462510698993825798}
-    - targetCorrespondingSourceObject: {fileID: 6981642495833523204, guid: f6c987b60fc46ef45ab5ff14b54b68d4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4329289471761109739}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1767192433, guid: f6c987b60fc46ef45ab5ff14b54b68d4, type: 3}
       insertIndex: -1
