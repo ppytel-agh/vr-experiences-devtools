@@ -18,7 +18,7 @@ public class TeleportationScenePortal : BaseTeleportationInteractable
         // {
             // playerRoot = playerRoot.parent;
         // }
-        // DontDestroyOnLoad(exitDestination.gameObject);
+        DontDestroyOnLoad(exitDestination.gameObject);
         //DontDestroyOnLoad(playerRoot);
 
         // Scene enterScene = SceneManager.GetActiveScene();
@@ -42,10 +42,10 @@ public class TeleportationScenePortal : BaseTeleportationInteractable
             // }
         // }
 
-        // teleportRequest.destinationPosition = exitDestination.position;
-        // teleportRequest.destinationRotation = exitDestination.rotation;
+        teleportRequest.destinationPosition = exitDestination.position;
+        teleportRequest.destinationRotation = exitDestination.rotation;
 
-        // Destroy(exitDestination.gameObject);
+        Destroy(exitDestination.gameObject);
 
         return true;
     }
