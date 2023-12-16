@@ -21,29 +21,10 @@ public class IntersceneTeleportationProvider : LocomotionProvider
         get => m_DelayTime;
         set => m_DelayTime = value;
     }
-    public TransitionEndProvider transitionEndProvider;
 
     private bool awaitingRequest = false;
     private string destinationSceneName;
     private string destinationPositionName;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("No player in scene");
-        }
-
-        TransitionEndProvider transitionEndProvider = player.GetComponentInChildren<TransitionEndProvider>();
-        if (transitionEndProvider == null)
-        {
-            Debug.LogError("Player does not have transition end provider");
-        }
-
-        this.transitionEndProvider = transitionEndProvider;
-    }
 
     /// <summary>
     /// This function will queue a teleportation request within the provider.
@@ -85,6 +66,11 @@ public class IntersceneTeleportationProvider : LocomotionProvider
         locomotionPhase = LocomotionPhase.Moving;
         Debug.Log($"start coroutine: teleporting to scene {this.destinationSceneName}");
         StartCoroutine(sceneLoadCoroutine(this.destinationSceneName, this.destinationPositionName));
+
+        EndLocomotion();
+        m_HasExclusiveLocomotion = false;
+        this.awaitingRequest = false;
+        locomotionPhase = LocomotionPhase.Done;
     }
 
     IEnumerator sceneLoadCoroutine(string destinationSceneName, string destinationPositionName)
@@ -105,11 +91,21 @@ public class IntersceneTeleportationProvider : LocomotionProvider
     private void OnSceneLoadCompleted(AsyncOperation asyncOperation)
     {
         Debug.Log("post scene load");
-        this.transitionEndProvider.teleportationExit(this.destinationPositionName);       
 
-        //EndLocomotion();
-        //m_HasExclusiveLocomotion = false;
-        //this.awaitingRequest = false;
-        //locomotionPhase = LocomotionPhase.Done;
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("No player in scene");
+            return;
+        }
+
+        TransitionEndProvider transitionEndProvider = player.GetComponentInChildren<TransitionEndProvider>();
+        if (transitionEndProvider == null)
+        {
+            Debug.LogError("Player does not have transition end provider");
+            return;
+        }
+
+        transitionEndProvider.teleportationExit(this.destinationPositionName);
     }
 }
