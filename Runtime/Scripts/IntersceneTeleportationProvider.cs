@@ -21,10 +21,29 @@ public class IntersceneTeleportationProvider : LocomotionProvider
         get => m_DelayTime;
         set => m_DelayTime = value;
     }
+    public TransitionEndProvider transitionEndProvider;
 
     private bool awaitingRequest = false;
     private string destinationSceneName;
     private string destinationPositionName;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("No player in scene");
+        }
+
+        TransitionEndProvider transitionEndProvider = player.GetComponentInChildren<TransitionEndProvider>();
+        if (transitionEndProvider == null)
+        {
+            Debug.LogError("Player does not have transition end provider");
+        }
+
+        this.transitionEndProvider = transitionEndProvider;
+    }
 
     /// <summary>
     /// This function will queue a teleportation request within the provider.
@@ -86,32 +105,7 @@ public class IntersceneTeleportationProvider : LocomotionProvider
     private void OnSceneLoadCompleted(AsyncOperation asyncOperation)
     {
         Debug.Log("post scene load");
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("No player in scene");
-        }
-
-        TeleportationProvider playerTeleporataionProvider = player.GetComponentInChildren<TeleportationProvider>();
-        if (playerTeleporataionProvider == null)
-        {
-            Debug.LogError("Player does not have teleporation provider");
-        }
-
-        //get position and rotation
-        GameObject destinationPosition = GameObject.Find(this.destinationPositionName);
-        if (destinationPosition != null) {
-            Transform exitDestination = destinationPosition.transform;
-            TeleportRequest exitSceneSpawn = new TeleportRequest();
-            exitSceneSpawn.destinationPosition = new Vector3(exitDestination.position.x, exitDestination.position.y, exitDestination.position.z);
-            exitSceneSpawn.destinationRotation = new Quaternion(exitDestination.rotation.x, exitDestination.rotation.y, exitDestination.rotation.z, exitDestination.rotation.w);
-
-            playerTeleporataionProvider.QueueTeleportRequest(exitSceneSpawn);
-        }
-        else
-        {
-            Debug.LogError($"No exit by name{this.destinationPositionName}");
-        }
+        this.transitionEndProvider.teleportationExit(this.destinationPositionName);       
 
         //EndLocomotion();
         //m_HasExclusiveLocomotion = false;
