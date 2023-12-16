@@ -14,6 +14,7 @@ public class TransitionEndProvider : LocomotionProvider
     private float m_TimeStarted;
     public void teleportationExit(string exitPositionName)
     {
+        Debug.Log($"requested transition end to {exitPositionName}");
         this.exitPositionName = exitPositionName;
         this.awaitingRequest = true;
     }
@@ -35,29 +36,29 @@ public class TransitionEndProvider : LocomotionProvider
             m_HasExclusiveLocomotion = true;
             locomotionPhase = LocomotionPhase.Started;
             m_TimeStarted = Time.time;
-        }
-        locomotionPhase = LocomotionPhase.Moving;
-        //move rig to position
-        //get position and rotation
-        GameObject destinationPosition = GameObject.Find(this.exitPositionName);
-        if (destinationPosition != null)
-        {
-            Transform exitDestination = destinationPosition.transform;
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
+            //move rig to position
+            //get position and rotation
+            GameObject destinationPosition = GameObject.Find(this.exitPositionName);
+            if (destinationPosition != null)
             {
-                Debug.Log("moving player to position");
-                player.transform.position = exitDestination.position;
-                player.transform.rotation = exitDestination.rotation;
+                Transform exitDestination = destinationPosition.transform;
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null)
+                {
+                    Debug.Log("moving player to position");
+                    player.transform.position = exitDestination.position;
+                    player.transform.rotation = exitDestination.rotation;
+                }
+                else
+                {
+                    Debug.LogError("No player in scene");
+                }
             }
             else
             {
-                Debug.LogError("No player in scene");
+                Debug.LogError($"No exit by name{this.exitPositionName}");
             }
-        }
-        else
-        {
-            Debug.LogError($"No exit by name{this.exitPositionName}");
+            locomotionPhase = LocomotionPhase.Moving;
         }
 
         // Wait for configured Delay Time
