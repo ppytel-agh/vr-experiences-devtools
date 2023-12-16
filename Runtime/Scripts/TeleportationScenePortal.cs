@@ -1,3 +1,4 @@
+using Codice.Client.BaseCommands.BranchExplorer;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,51 +11,27 @@ public class TeleportationScenePortal : BaseTeleportationInteractable
 {
     public string exitSceneName;
     public Transform exitDestination;
-    private Transform playerRoot;
+    private TeleportRequest exitSceneSpawn;
     protected override bool GenerateTeleportRequest(IXRInteractor interactor, RaycastHit raycastHit, ref TeleportRequest teleportRequest)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        this.playerRoot = player.transform;
+        this.exitSceneSpawn = new TeleportRequest();
+        this.exitSceneSpawn.destinationPosition = new Vector3(exitDestination.position.x, exitDestination.position.y, exitDestination.position.z);
+        this.exitSceneSpawn.destinationRotation = new Quaternion(exitDestination.rotation.x, exitDestination.rotation.y, exitDestination.rotation.z, exitDestination.rotation.w);
 
-        while (playerRoot.parent != null)
-        {
-            this.playerRoot = playerRoot.parent;
-        }
-        DontDestroyOnLoad(exitDestination.gameObject);
-        DontDestroyOnLoad(this.playerRoot);
-
-        // Scene enterScene = SceneManager.GetActiveScene();
-        this.transfer();
-        //SceneManager.LoadScene(this.exitSceneName, LoadSceneMode.Single);
-
-
-
-        teleportRequest.destinationPosition = exitDestination.position;
-        teleportRequest.destinationRotation = exitDestination.rotation;
-
-       //Destroy(exitDestination.gameObject);
+        StartCoroutine(sceneLoadCoroutine());
 
         return true;
     }
 
-    private void transfer()
+    IEnumerator sceneLoadCoroutine()
     {
-        string previousSceneName = SceneManager.GetActiveScene().name;
-        DontDestroyOnLoad(this.gameObject);
-        StartCoroutine(sceneLoadCoroutine(previousSceneName, this.exitSceneName));
-    }
-
-    IEnumerator sceneLoadCoroutine(string previousSceneName, string destinationSceneName)
-    {
-        Debug.Log("entered scene load coroutine");
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(destinationSceneName);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(this.exitSceneName);
 
         asyncLoad.completed += OnSceneLoadCompleted;
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
-            Debug.Log("scene load async loop");
             yield return null;
         }
     }
@@ -62,36 +39,17 @@ public class TeleportationScenePortal : BaseTeleportationInteractable
     private void OnSceneLoadCompleted(AsyncOperation asyncOperation)
     {
         Debug.Log("post scene load");
-
-        //remove other event systems
-        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach (GameObject playerInstance in allPlayers)
-        {
-            Debug.Log(playerInstance);
-            Transform playerInstanceRoot = playerInstance.transform;
-
-            while (playerInstanceRoot.parent != null)
-            {
-                playerInstanceRoot = playerInstanceRoot.parent;
-            }
-            if (playerInstanceRoot != this.playerRoot)
-            {
-                Destroy(playerInstanceRoot.gameObject);
-            }
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null) {
+            Debug.LogError("No player in scene");
         }
-        //GameObject[] portals = GameObject.FindGameObjectsWithTag("Portal");
-        //foreach (GameObject portal in portals)
-        //{
-        //    string portalDestionation = portal.GetComponent<ScenesPortal>().destinationSceneName;
-        //    if (portalDestionation == previousSceneName)
-        //    {
-        //        player.transform.position = portal.transform.position;
-        //        player.transform.rotation = portal.transform.rotation;
-        //        player.transform.Translate(Vector3.forward * 2.5f);
-        //        break;
-        //    }
-        //}
-        Debug.Log("end of scene load");
+
+        TeleportationProvider playerTeleporataionProvider = player.GetComponentInChildren<TeleportationProvider>();
+        if(playerTeleporataionProvider == null)
+        {
+            Debug.LogError("Player does not have teleporation provider");
+        }
+
+        playerTeleporataionProvider.QueueTeleportRequest(this.exitSceneSpawn);
     }
 }
