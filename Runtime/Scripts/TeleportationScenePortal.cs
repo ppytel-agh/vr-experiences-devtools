@@ -14,6 +14,7 @@ public class TeleportationScenePortal : XRBaseInteractable
     public string destinationSceneName;
     public string destinationPositionName;
     private IntersceneTeleportationProvider teleportationProvider;
+    
 
     /// <inheritdoc />
     protected override void Awake()
