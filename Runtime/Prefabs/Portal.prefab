@@ -519,17 +519,8 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  m_TeleportationProvider: {fileID: 0}
-  m_MatchOrientation: 0
-  m_MatchDirectionalInput: 0
-  m_TeleportTrigger: 0
-  m_FilterSelectionByHitNormal: 0
-  m_UpNormalToleranceDegrees: 30
-  m_Teleporting:
-    m_PersistentCalls:
-      m_Calls: []
-  exitSceneName: 
-  exitDestination: {fileID: 0}
+  destinationSceneName: 
+  destinationPositionName: 
 --- !u!1 &7257275631841314349
 GameObject:
   m_ObjectHideFlags: 0
