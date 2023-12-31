@@ -41,3 +41,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Missing materials
+
+## [0.4.0] - 2023-12-31
+
+## Added
+
+- Tunneling vignette in scenes transition
+- VR Rig Spawner
+
+### Changed
+
+- Interactive Display encapsulates the model inside a boundary
+- Scenes transition portal takes the name of gameobject with which the player is aligned in new scene
+
+### Fixed
+
+- Issues with scenes transition system
