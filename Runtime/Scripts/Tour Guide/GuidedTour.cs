@@ -23,7 +23,6 @@ public class GuidedTour : MonoBehaviour
         PlayingDescription
     }
 
-    public XROrigin player;
     public Transform guide;
     public float guideMovementSpeed = 1.0f;
     public float guideRotationSpeed = 1.0f;
@@ -69,7 +68,6 @@ public class GuidedTour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
         switch (this.phase)
         {
             case TourPhase.Idle:
@@ -132,7 +130,8 @@ public class GuidedTour : MonoBehaviour
                 }
                 break;
             case TourPhase.AtStop:
-                float distanceFromPlayer = Vector3.Distance(this.guide.transform.position, player.transform.position);
+                XROrigin origin = FindObjectOfType<XROrigin>();
+                float distanceFromPlayer = Vector3.Distance(this.guide.transform.position, origin.transform.position);
                 Debug.Log($"Player distance - {distanceFromPlayer}");
                 if (distanceFromPlayer <= this.maxDistanceToPlayDescription)
                 {
