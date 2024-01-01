@@ -6,24 +6,15 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class RailwayLineRendererSynchronization : MonoBehaviour
 {
-    public bool enabled = false;
+    public bool synchronisationEnabled = false;
     public OneWayRailwayRoot railwayRoot;
     public LineRenderer railwayLineRenderer;
-    //private OneWayRailwayRoot previousRailwayState;
-    //private LineRenderer previousLineRendererState;   
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-        Debug.Log("awoken RailwayLineRendererSynchronization");
-    }
 
     // Update is called once per frame
     void Update()
     {
-        if (enabled)
+        if (this.synchronisationEnabled)
         {
-            Debug.Log("updating RailwayLineRendererSynchronization");
             SynchronizeRailNodesWithLineRenderer();
         }
     }
