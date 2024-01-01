@@ -96,7 +96,6 @@ public class RailLocomotionProvider : LocomotionProvider
     {
         if(this.locomotionPhase == LocomotionPhase.Started)
         {
-            Debug.Log("starting rail movement");
             BeginLocomotion();
 
             this.currentSegment = this.GetCurrentSegmentFromNodes();
@@ -110,7 +109,6 @@ public class RailLocomotionProvider : LocomotionProvider
         }
         else if(this.locomotionPhase == LocomotionPhase.Moving)
         {
-            Debug.Log("continuing rail movement");
             Vector3 rigPosition = system.xrOrigin.Origin.transform.position;
 
             float t = this.currentSegment.GetDistanceFromStartRelativeToLength(rigPosition);
@@ -142,7 +140,6 @@ public class RailLocomotionProvider : LocomotionProvider
             }
         }else if(this.locomotionPhase == LocomotionPhase.Done)
         {
-            Debug.Log("finished rail movement");
             EndLocomotion();
 
             this.locomotionPhase = LocomotionPhase.Idle;

@@ -33,24 +33,4 @@ public class RailNode : MonoBehaviour
 
         return node;
     }
-
-    //public List<RailMovementNode> GetForwardNodesList(List<RailMovementNode> nodesList)
-    //{
-    //    nodesList.Append(this.GetMovementNode());
-    //    nodesList = this.nextNode!.GetForwardNodesList(nodesList);
-    //    return nodesList;
-    //}
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
