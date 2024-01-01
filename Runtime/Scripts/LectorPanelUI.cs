@@ -7,16 +7,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LectorPanelUI : MonoBehaviour
-{
-    /*
-    [TextArea]
-    public String panelText;
-    */
+{    
     public AudioSource transcription;
+    public TextMeshProUGUI textContent;
     public Slider transcriptionProgress;
     public TextMeshProUGUI transcriptionProgressTimingText;
     public TextMeshProUGUI playPauseButtonText;
-    public Scrollbar panelTextVerticalScroll;
 
     private bool isPlaying;
     private string clipLengthInfo;
@@ -79,9 +75,6 @@ public class LectorPanelUI : MonoBehaviour
         return lengthInfo;
     }
 
-    /**
-     * TODO: export to some utility library
-     */
     String GetClipLengthInfo(AudioClip clip)
     {
         float clipLength = clip.length;
