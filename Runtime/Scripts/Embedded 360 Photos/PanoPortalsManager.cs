@@ -23,36 +23,27 @@ public class PanoPortalsManager : MonoBehaviour
 
     public void enterPano(Material skyboxCubemap)
     {
-        //disable every object except pano manager and xr player rig
+        //get Player root
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         Transform playerRoot = player.transform;
-
         while (playerRoot.parent != null)
         {
             playerRoot = playerRoot.parent;
         }
-        //GameObject panoPortalsManager = GameObject.FindGameObjectWithTag("pano-manager");
+
+        //disable every object except pano manager and xr player rig
         List<GameObject> rootObjectsToKeepEnabled = new List<GameObject>();
         rootObjectsToKeepEnabled.Add(this.gameObject);
-        rootObjectsToKeepEnabled.Add(playerRoot.gameObject);
-        //rootObjectsToKeepEnabled.Add(panoPortalsManager);        
-        
+        rootObjectsToKeepEnabled.Add(playerRoot.gameObject);              
         DisableOtherObjectsInScene(rootObjectsToKeepEnabled, out this.disabledObjects);
-        //save previous camera skybox
+
+        //swap skyboxes while preserving previous one
         this.previousSkybox = RenderSettings.skybox;
-        //Camera playerCamera = player.GetComponentInChildren<Camera>();
-        //UniversalAdditionalCameraData cameraData = playerCamera.GetUniversalAdditionalCameraData();
-        //set material as camera skybox
         RenderSettings.skybox = skyboxCubemap;
-        //enable pano platform - blur around platform
 
-        //disable locomotion
-        //set exit interactable
-        this.exit.SetActive(true);
         //place exit above player
+        this.exit.SetActive(true);
         this.exit.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2.5f, player.transform.position.z);
-
-        //TODO: manipulate vignette
     }
 
     public void exitPano()
@@ -72,11 +63,9 @@ public class PanoPortalsManager : MonoBehaviour
 
     void DisableOtherObjectsInScene(List<GameObject> rootObjectsToKeepEnabled, out List<GameObject> disabledObjects)
     {
-        // Find all GameObjects in the scene
-        GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
         disabledObjects = new List<GameObject>();
 
-        // Iterate through all objects
+        GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
         foreach (GameObject obj in rootObjects)
         {
             // Check if the object should be kept enabled
