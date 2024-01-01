@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -8,10 +9,11 @@ public class TransitionEndProvider : LocomotionProvider
 {
     public float exitDelay;
 
-    private bool awaitingRequest = false;
     private string exitPositionName;
-    private bool m_HasExclusiveLocomotion;
-    private float m_TimeStarted;
+    
+    private bool awaitingRequest = false;
+    private bool hasExclusiveLocomotion = false;
+    private float locomotionStartTime;
     public void teleportationExit(string exitPositionName)
     {
         Debug.Log($"requested transition end to {exitPositionName}");
@@ -28,31 +30,23 @@ public class TransitionEndProvider : LocomotionProvider
             return;
         }
 
-        if (!m_HasExclusiveLocomotion)
+        if (!this.hasExclusiveLocomotion)
         {
             if (!BeginLocomotion())
                 return;
 
-            m_HasExclusiveLocomotion = true;
+            this.hasExclusiveLocomotion = true;
             locomotionPhase = LocomotionPhase.Started;
-            m_TimeStarted = Time.time;
-            //move rig to position
-            //get position and rotation
+            this.locomotionStartTime = Time.time;
             GameObject destinationPosition = GameObject.Find(this.exitPositionName);
+            //get position and rotation
             if (destinationPosition != null)
             {
                 Transform exitDestination = destinationPosition.transform;
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null)
-                {
-                    Debug.Log("moving player to position");
-                    player.transform.position = exitDestination.position;
-                    player.transform.rotation = exitDestination.rotation;
-                }
-                else
-                {
-                    Debug.LogError("No player in scene");
-                }
+                //move rig to position
+                XROrigin origin = Object.FindObjectOfType<XROrigin>();
+                origin.transform.position = exitDestination.position;
+                origin.transform.rotation = exitDestination.rotation;                
             }
             else
             {
@@ -61,12 +55,12 @@ public class TransitionEndProvider : LocomotionProvider
             locomotionPhase = LocomotionPhase.Moving;
         }
 
-        // Wait for configured Delay Time
-        if (exitDelay > 0f && Time.time - m_TimeStarted < exitDelay)
+
+        if (this.exitDelay > 0f && Time.time - this.locomotionStartTime < this.exitDelay)
             return;
 
         EndLocomotion();
-        m_HasExclusiveLocomotion = false;
+        this.hasExclusiveLocomotion = false;
         this.awaitingRequest = false;
         locomotionPhase = LocomotionPhase.Done;
     }

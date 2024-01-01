@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -8,39 +9,22 @@ using UnityEngine.XR.Interaction.Toolkit;
 //based on TeleportationProvider
 public class IntersceneTeleportationProvider : LocomotionProvider
 {
-    [SerializeField]
-    [Tooltip("The time (in seconds) to delay the teleportation once it is activated.")]
-    float m_DelayTime;
+    public float enterDelay;
 
-    /// <summary>
-    /// The time (in seconds) to delay the teleportation once it is activated.
-    /// This delay can be used, for example, as time to set a tunneling vignette effect as a VR comfort option.
-    /// </summary>
-    public float delayTime
-    {
-        get => m_DelayTime;
-        set => m_DelayTime = value;
-    }
-
-    private bool awaitingRequest = false;
     private string destinationSceneName;
     private string destinationPositionName;
 
-    /// <summary>
-    /// This function will queue a teleportation request within the provider.
-    /// </summary>
-    /// <param name="teleportRequest">The teleportation request to queue.</param>
-    /// <returns>Returns <see langword="true"/> if successfully queued. Otherwise, returns <see langword="false"/>.</returns>
+    private bool awaitingRequest = false;
+    private bool hasExclusiveLocomotion = false;
+    private float locomotionStartTime;
+
     public void sendTeleportRequest(string destinationSceneName, string destinationPositionName)
     {
         this.destinationSceneName = destinationSceneName;
         this.destinationPositionName = destinationPositionName;
-        Debug.Log($"sent request: teleporting to scene {this.destinationSceneName}");
         this.awaitingRequest = true;
     }
 
-    bool m_HasExclusiveLocomotion;
-    float m_TimeStarted = -1f;
     protected virtual void Update()
     {
         if (!this.awaitingRequest)
@@ -49,33 +33,30 @@ public class IntersceneTeleportationProvider : LocomotionProvider
             return;
         }
 
-        if (!m_HasExclusiveLocomotion)
+        if (!this.hasExclusiveLocomotion)
         {
             if (!BeginLocomotion())
                 return;
 
-            m_HasExclusiveLocomotion = true;
+            this.hasExclusiveLocomotion = true;
             locomotionPhase = LocomotionPhase.Started;
-            m_TimeStarted = Time.time;
+            this.locomotionStartTime = Time.time;
         }
 
-        // Wait for configured Delay Time
-        if (m_DelayTime > 0f && Time.time - m_TimeStarted < m_DelayTime)
+        if (this.enterDelay > 0f && Time.time - this.locomotionStartTime < this.enterDelay)
             return;
 
         locomotionPhase = LocomotionPhase.Moving;
-        Debug.Log($"start coroutine: teleporting to scene {this.destinationSceneName}");
         StartCoroutine(sceneLoadCoroutine(this.destinationSceneName, this.destinationPositionName));
 
         EndLocomotion();
-        m_HasExclusiveLocomotion = false;
+        this.hasExclusiveLocomotion = false;
         this.awaitingRequest = false;
         locomotionPhase = LocomotionPhase.Done;
     }
 
     IEnumerator sceneLoadCoroutine(string destinationSceneName, string destinationPositionName)
     {
-        Debug.Log($"teleporting to scene {destinationSceneName}");
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(destinationSceneName);
 
         asyncLoad.completed += OnSceneLoadCompleted;
@@ -92,19 +73,8 @@ public class IntersceneTeleportationProvider : LocomotionProvider
     {
         Debug.Log("post scene load");
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("No player in scene");
-            return;
-        }
-
-        TransitionEndProvider transitionEndProvider = player.GetComponentInChildren<TransitionEndProvider>();
-        if (transitionEndProvider == null)
-        {
-            Debug.LogError("Player does not have transition end provider");
-            return;
-        }
+        XROrigin origin = Object.FindObjectOfType<XROrigin>();
+        TransitionEndProvider transitionEndProvider = origin.GetComponentInChildren<TransitionEndProvider>();
 
         transitionEndProvider.teleportationExit(this.destinationPositionName);
     }

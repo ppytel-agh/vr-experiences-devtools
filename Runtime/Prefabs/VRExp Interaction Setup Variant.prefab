@@ -352,7 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_System: {fileID: 0}
-  m_DelayTime: 1
+  enterDelay: 2
 --- !u!1001 &680268632377346411
 PrefabInstance:
   m_ObjectHideFlags: 0

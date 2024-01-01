@@ -1,6 +1,7 @@
 using Codice.Client.BaseCommands.BranchExplorer;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.LowLevel;
@@ -12,34 +13,17 @@ using static UnityEngine.XR.Interaction.Toolkit.BaseTeleportationInteractable;
 public class TeleportationScenePortal : XRBaseInteractable
 {
     public string destinationSceneName;
-    public string destinationPositionName;
-    private IntersceneTeleportationProvider teleportationProvider;
-    
+    public string destinationPositionName;   
 
-    /// <inheritdoc />
-    protected override void Awake()
+    protected override void OnSelectEntered(SelectEnterEventArgs interactor)
     {
-        base.Awake();
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("No player in scene");
-        }
+        //assume interactor is the player and it has the locomotion provider
+        GameObject interactorObject = interactor.interactorObject.transform.gameObject;
+        XROrigin origin = interactorObject.GetComponentInParent<XROrigin>();
+        IntersceneTeleportationProvider locomotionProvider = origin.GetComponentInChildren<IntersceneTeleportationProvider>();
 
-        IntersceneTeleportationProvider playerTeleporataionProvider = player.GetComponentInChildren<IntersceneTeleportationProvider>();
-        if (playerTeleporataionProvider == null)
-        {
-            Debug.LogError("Player does not have teleporation provider");
-        }
+        locomotionProvider.sendTeleportRequest(this.destinationSceneName, this.destinationPositionName);
 
-        this.teleportationProvider = playerTeleporataionProvider;
-    }
-
-    /// <inheritdoc />
-    protected override void OnSelectEntered(SelectEnterEventArgs args)
-    {
-        this.teleportationProvider.sendTeleportRequest(this.destinationSceneName, this.destinationPositionName);
-
-        base.OnSelectEntered(args);
+        base.OnSelectEntered(interactor);
     }
 }
