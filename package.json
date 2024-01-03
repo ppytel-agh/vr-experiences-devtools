@@ -8,7 +8,8 @@
 		"name": "Paweł Pytel"
 	},
 	"dependencies": {
-		"com.unity.xr.interaction.toolkit": "2.5.2"
+		"com.unity.xr.interaction.toolkit": "2.5.2",
+		"com.unity.render-pipelines.universal": "14.0.9"
 	},
 	"samples": [
 		{
