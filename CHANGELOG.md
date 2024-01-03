@@ -57,3 +57,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Issues with scenes transition system
+
+## [1.0.0] - 2024-01-03
+
+### Added
+
+- Text Content reference in LectorPanel
+- Graphics and audio for samples
+
+### Changed
+
+- merged pano-manager with VR rig
+
+### Fixed
+
+- Missing materials issues
